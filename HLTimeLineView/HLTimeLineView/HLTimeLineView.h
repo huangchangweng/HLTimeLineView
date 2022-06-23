@@ -1,20 +1,21 @@
-# HLTimeLineView
-iOS时间轴，xib、storyboard中也能愉快的使用
+//
+//  HLTimeLineView.h
+//  HLTimeLineView
+//
+//  Created by JJB_iOS on 2022/6/23.
+//
 
-##### 支持使用CocoaPods引入, Podfile文件中添加:
+#import <UIKit/UIKit.h>
 
-``` objc
-pod 'HLTimeLineView', '1.0.0'
-```
+typedef NS_ENUM(NSInteger, HLTimeLineViewType) {
+    HLTimelineViewTypeAll,      ///< 上下都有
+    HLTimelineViewTypeBottom,   ///< 只有下面
+    HLTimelineViewTypeTop,      ///< 只有上面
+    HLTimelineViewTypeNone,     ///< 下面都没有
+};
 
-# Demonstration
-
-![image](https://github.com/huangchangweng/HLCountDownButton/blob/main/QQ20220610-112617.gif)
-![image](https://github.com/huangchangweng/HLCountDownButton/blob/main/QQ20220610-112252.gif)
-
-可设置属性:<p>
-
-``` objc
+IB_DESIGNABLE
+@interface HLTimeLineView : UIView
 /// 线颜色，默认0xDCE7FF
 @property (nonatomic, strong) IBInspectable UIColor *lineColor;
 /// 线宽度，默认2
@@ -29,18 +30,4 @@ pod 'HLTimeLineView', '1.0.0'
 @property (nonatomic, assign) IBInspectable CGFloat nodeTop;
 /// 时间轴样式，默认HLTimelineViewTypeNone
 @property (nonatomic, assign) IBInspectable NSInteger type;
-```
-
-# Requirements
-
-iOS 9.0 +, Xcode 7.0 +
-
-# Version
-
-* 1.0.0 :
-
-  完成HLTimeLineView基础搭建
-
-# License
-
-HLTimeLineView is available under the MIT license. See the LICENSE file for more info.
+@end
