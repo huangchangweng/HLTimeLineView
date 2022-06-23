@@ -9,8 +9,8 @@ pod 'HLTimeLineView', '1.0.0'
 
 # Demonstration
 
-![image](https://github.com/huangchangweng/HLCountDownButton/blob/main/QQ20220610-112617.gif)
-![image](https://github.com/huangchangweng/HLCountDownButton/blob/main/QQ20220610-112252.gif)
+![image](https://github.com/huangchangweng/HLTimeLineView/blob/main/ScreenShot.png)
+![image](https://github.com/huangchangweng/HLTimeLineView/blob/main/1655965224909.jpg)
 
 可设置属性:<p>
 
