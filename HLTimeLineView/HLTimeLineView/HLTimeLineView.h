@@ -17,15 +17,15 @@ typedef NS_ENUM(NSInteger, HLTimeLineViewType) {
 IB_DESIGNABLE
 @interface HLTimeLineView : UIView
 /// 线颜色，默认0xDCE7FF
-@property (nonatomic, strong) IBInspectable UIColor *lineColor;
+@property (nonatomic, strong) IBInspectable UIColor *lineColor UI_APPEARANCE_SELECTOR;
 /// 线宽度，默认2
-@property (nonatomic, assign) IBInspectable CGFloat lineWidth;
+@property (nonatomic, assign) IBInspectable CGFloat lineWidth UI_APPEARANCE_SELECTOR;
 /// 节点背景颜色，默认whiteColor
-@property (nonatomic, strong) IBInspectable UIColor *nodeBackgroundColor;
+@property (nonatomic, strong) IBInspectable UIColor *nodeBackgroundColor UI_APPEARANCE_SELECTOR;
 /// 节点颜色，默认0x4181FE
-@property (nonatomic, strong) IBInspectable UIColor *nodeColor;
+@property (nonatomic, strong) IBInspectable UIColor *nodeColor UI_APPEARANCE_SELECTOR;
 /// 节点边框宽度，默认2，如果nodeBorderWidth == 0那么节点就是实心圆
-@property (nonatomic, assign) IBInspectable CGFloat nodeBorderWidth;
+@property (nonatomic, assign) IBInspectable CGFloat nodeBorderWidth UI_APPEARANCE_SELECTOR;
 /// 节点顶部距离，默认10
 @property (nonatomic, assign) IBInspectable CGFloat nodeTop;
 /// 时间轴样式，默认HLTimelineViewTypeNone

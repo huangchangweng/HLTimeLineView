@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HLTimeLineView.h"
 
 @interface AppDelegate ()
 
@@ -15,7 +16,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    // 全局设置HLTimeLineView样式
+//    [HLTimeLineView appearance].lineColor = [UIColor redColor];
+    
     return YES;
 }
 
