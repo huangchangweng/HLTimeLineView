@@ -4,7 +4,7 @@ iOS时间轴，xib、storyboard中也能愉快的使用
 ##### 支持使用CocoaPods引入, Podfile文件中添加:
 
 ``` objc
-pod 'HLTimeLineView', '1.0.0'
+pod 'HLTimeLineView', '1.0.1'
 ```
 
 # Demonstration
