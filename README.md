@@ -1,10 +1,20 @@
 # HLTimeLineView
 iOS时间轴，xib、storyboard中也能愉快的使用
 
+
+
+✅1.自定义上下线颜色宽度
+
+✅2.自定义节点颜色、实心、空心
+
+✅3.自定义节点与线的距离
+
+✅4.自定义节点为图片
+
 ##### 支持使用CocoaPods引入, Podfile文件中添加:
 
 ``` objc
-pod 'HLTimeLineView', '1.0.1'
+pod 'HLTimeLineView', '1.0.2'
 ```
 
 # Demonstration
@@ -29,6 +39,12 @@ pod 'HLTimeLineView', '1.0.1'
 @property (nonatomic, assign) IBInspectable CGFloat nodeTop;
 /// 时间轴样式，默认HLTimelineViewTypeNone
 @property (nonatomic, assign) IBInspectable NSInteger type;
+/// 节点顶部距离线间隙，默认0
+@property (nonatomic, assign) IBInspectable CGFloat nodeTopSpace UI_APPEARANCE_SELECTOR;
+/// 节点底部距离线间隙，默认0
+@property (nonatomic, assign) IBInspectable CGFloat nodeBottomSpace UI_APPEARANCE_SELECTOR;
+/// 节点自定义图片，默认nil
+@property (nonatomic, strong) IBInspectable UIImage *nodeImage UI_APPEARANCE_SELECTOR;
 ```
 
 # GlobalSetting
@@ -47,6 +63,12 @@ iOS 9.0 +, Xcode 7.0 +
 
 # Version
 
+* 1.0.2 :
+
+  自定义节点与线的距离
+  
+  自定义节点为图片
+  
 * 1.0.1 :
 
   添加全局设置HLTimeLineView样式功能

@@ -30,4 +30,10 @@ IB_DESIGNABLE
 @property (nonatomic, assign) IBInspectable CGFloat nodeTop;
 /// 时间轴样式，默认HLTimelineViewTypeNone
 @property (nonatomic, assign) IBInspectable NSInteger type;
+/// 节点顶部距离线间隙，默认0
+@property (nonatomic, assign) IBInspectable CGFloat nodeTopSpace UI_APPEARANCE_SELECTOR;
+/// 节点底部距离线间隙，默认0
+@property (nonatomic, assign) IBInspectable CGFloat nodeBottomSpace UI_APPEARANCE_SELECTOR;
+/// 节点自定义图片，默认nil
+@property (nonatomic, strong) IBInspectable UIImage *nodeImage UI_APPEARANCE_SELECTOR;
 @end

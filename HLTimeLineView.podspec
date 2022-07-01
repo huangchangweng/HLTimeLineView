@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "HLTimeLineView"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "iOS时间轴，xib、storyboard中也能愉快的使用"
 
   # 描述
