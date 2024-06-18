@@ -40,52 +40,104 @@
     _nodeBackgroundColor = [UIColor whiteColor];
     _nodeColor = HLUIColorFromHEX(0x4181FE);
     _nodeBorderWidth = 2;
-    _nodeTop = 10;
-    _nodeTopSpace = 0;
-    _nodeBottomSpace = 0;
+    _nodeAfter = 10;
+    _nodeAfterSpace = 0;
+    _nodeBeforeSpace = 0;
 }
 
 - (void)drawWithFrame:(CGRect)frame
 {
-    // 绘制上、下面线
-    CGFloat lineX = (CGRectGetWidth(frame) - _lineWidth) / 2.0f;
-    CGRect topLineRect = CGRectMake(lineX, 0, _lineWidth, _nodeTop - _nodeTopSpace);
-    CGFloat bottomLineY = _nodeTop + CGRectGetWidth(frame) + _nodeTopSpace;
-    CGRect bottomLineRect = CGRectMake(lineX, bottomLineY, _lineWidth, CGRectGetHeight(frame) - bottomLineY);
-    switch (_type) {
-        case HLTimelineViewTypeBottom:
-            [self drawLineFrame:bottomLineRect];
-            break;
-        case HLTimelineViewTypeTop:
-            [self drawLineFrame:topLineRect];
-            break;
-        case HLTimelineViewTypeAll:
-            [self drawLineFrame:topLineRect];
-            [self drawLineFrame:bottomLineRect];
-            break;
+    if (_direction == 0) {
+        [self verticalDraw:frame];
+    } else {
+        [self horizontalDraw:frame];
     }
+}
+
+- (void)verticalDraw:(CGRect)frame
+{
+    // 绘制上/下面线
+    CGFloat size = CGRectGetWidth(frame);
+    CGFloat lineX = (size - _lineWidth) / 2.0f;
+    CGRect topLineRect = CGRectMake(lineX, 0, _lineWidth, _nodeAfter - _nodeAfterSpace);
+    CGFloat bottomLineY = _nodeAfter + _nodeAfterSpace + size + _nodeBeforeSpace;
+    CGRect bottomLineRect = CGRectMake(lineX, bottomLineY, _lineWidth, CGRectGetHeight(frame) - bottomLineY);
+    [self drawLine:frame size:size afterLineRect:topLineRect beforeLineRect:bottomLineRect];
     
     // 图片节点
     if (_nodeImage) {
-        [self drawNodeImageSize:CGRectGetWidth(frame)];
+        [self drawNodeImageSize:size];
     }
     // 普通节点
     else {
         if (_nodeBorderWidth > 0) {
             // 空心圆
-            CGFloat nodeSize = CGRectGetWidth(frame) - _nodeBorderWidth;
-            CGRect nodeRect = CGRectMake(_nodeBorderWidth / 2.0f, _nodeTop + _nodeBorderWidth / 2.0f, nodeSize, nodeSize);
+            CGFloat nodeSize = size - _nodeBorderWidth;
+            CGRect nodeRect = CGRectMake(_nodeBorderWidth / 2.0f, _nodeAfter + _nodeBorderWidth / 2.0f, nodeSize, nodeSize);
             UIBezierPath *nodeBezierPath = [UIBezierPath bezierPathWithOvalInRect:nodeRect];
             nodeBezierPath.lineWidth = _nodeBorderWidth;
             [_nodeColor setStroke];
             [nodeBezierPath stroke];
         } else {
             // 实心圆
-            CGRect nodeRect = CGRectMake(0, _nodeTop, CGRectGetWidth(frame), CGRectGetWidth(frame));
+            CGRect nodeRect = CGRectMake(0, _nodeAfter, CGRectGetWidth(frame), CGRectGetWidth(frame));
             UIBezierPath *nodeBezierPath = [UIBezierPath bezierPathWithOvalInRect:nodeRect];
             [_nodeColor setFill];
             [nodeBezierPath fill];
         }
+    }
+}
+
+- (void)horizontalDraw:(CGRect)frame
+{
+    // 绘制左/右面线
+    CGFloat size = CGRectGetHeight(frame);
+    CGFloat lineY = (CGRectGetHeight(frame) - _lineWidth) / 2.0f;
+    CGRect leftLineRect = CGRectMake(0, lineY, _nodeAfter - _nodeAfterSpace, _lineWidth);
+    CGFloat rightLineX = _nodeAfter + _nodeAfterSpace + size + _nodeBeforeSpace;
+    CGRect rightLineRect = CGRectMake(rightLineX, lineY, CGRectGetWidth(frame) - rightLineX, _lineWidth);
+    [self drawLine:frame size:size afterLineRect:leftLineRect beforeLineRect:rightLineRect];
+    
+    // 图片节点
+    if (_nodeImage) {
+        [self drawNodeImageSize:size];
+    }
+    // 普通节点
+    else {
+        if (_nodeBorderWidth > 0) {
+            // 空心圆
+            CGFloat nodeSize = size - _nodeBorderWidth;
+            CGRect nodeRect = CGRectMake(_nodeAfter + _nodeBorderWidth / 2.0f, _nodeBorderWidth / 2.0f, nodeSize, nodeSize);
+            UIBezierPath *nodeBezierPath = [UIBezierPath bezierPathWithOvalInRect:nodeRect];
+            nodeBezierPath.lineWidth = _nodeBorderWidth;
+            [_nodeColor setStroke];
+            [nodeBezierPath stroke];
+        } else {
+            // 实心圆
+            CGRect nodeRect = CGRectMake(_nodeAfter, 0, CGRectGetHeight(frame), CGRectGetHeight(frame));
+            UIBezierPath *nodeBezierPath = [UIBezierPath bezierPathWithOvalInRect:nodeRect];
+            [_nodeColor setFill];
+            [nodeBezierPath fill];
+        }
+    }
+}
+
+- (void)drawLine:(CGRect)frame
+            size:(CGFloat)size
+   afterLineRect:(CGRect)afterLineRect
+  beforeLineRect:(CGRect)beforeLineRect
+{
+    switch (_type) {
+        case HLTimelineViewTypeAfter:
+            [self drawLineFrame:afterLineRect color:_lineAfterColor ? : _lineColor];
+            break;
+        case HLTimelineViewTypeBefore:
+            [self drawLineFrame:beforeLineRect color:_lineBeforeColor ? : _lineColor];
+            break;
+        case HLTimelineViewTypeAll:
+            [self drawLineFrame:afterLineRect color:_lineAfterColor ? : _lineColor];
+            [self drawLineFrame:beforeLineRect color:_lineBeforeColor ? : _lineColor];
+            break;
     }
 }
 
@@ -94,20 +146,27 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
-    CGRect imageRect = CGRectMake(0, _nodeTop, size, size);
+    CGRect imageRect = CGRectMake(_direction == 0 ? 0 : _nodeAfter, _direction == 0 ? _nodeAfter : 0, size, size);
     [_nodeImage drawInRect:imageRect];
     CGContextRestoreGState(context);
 }
 
 // 绘制线
-- (void)drawLineFrame:(CGRect)frame
+- (void)drawLineFrame:(CGRect)frame color:(UIColor *)color
 {
     UIBezierPath *rectanglePath = [UIBezierPath bezierPathWithRect:frame];
-    [_lineColor setFill];
+    [color setFill];
     [rectanglePath fill];
 }
 
 #pragma mark - Stter
+
+- (void)setDirection:(NSInteger)direction {
+    if (_direction != direction) {
+        _direction = direction;
+    }
+    [self setNeedsDisplay];
+}
 
 - (void)setLineColor:(UIColor *)lineColor {
     if (![_lineColor isEqual:lineColor]) {
@@ -137,6 +196,20 @@
     }
 }
 
+- (void)setLineAfterColor:(UIColor *)lineAfterColor {
+    if (![_lineAfterColor isEqual:lineAfterColor]) {
+        _lineAfterColor = lineAfterColor;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setLineBeforeColor:(UIColor *)lineBeforeColor {
+    if (![_lineBeforeColor isEqual:lineBeforeColor]) {
+        _lineBeforeColor = lineBeforeColor;
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)setNodeBorderWidth:(CGFloat)nodeBorderWidth {
     if (_nodeBorderWidth != nodeBorderWidth) {
         _nodeBorderWidth = nodeBorderWidth;
@@ -144,9 +217,9 @@
     }
 }
 
-- (void)setNodeTop:(CGFloat)nodeTop {
-    if (_nodeTop != nodeTop) {
-        _nodeTop = nodeTop;
+- (void)setnodeAfter:(CGFloat)nodeAfter {
+    if (_nodeAfter != nodeAfter) {
+        _nodeAfter = nodeAfter;
         [self setNeedsDisplay];
     }
 }
@@ -158,16 +231,16 @@
     [self setNeedsDisplay];
 }
 
-- (void)setNodeTopSpace:(CGFloat)nodeTopSpace {
-    if (_nodeTopSpace != nodeTopSpace) {
-        _nodeTopSpace = nodeTopSpace;
+- (void)setNodeAfterSpace:(CGFloat)nodeAfterSpace {
+    if (_nodeAfterSpace != nodeAfterSpace) {
+        _nodeAfterSpace = nodeAfterSpace;
     }
     [self setNeedsDisplay];
 }
 
-- (void)setNodeBottomSpace:(CGFloat)nodeBottomSpace {
-    if (_nodeBottomSpace != nodeBottomSpace) {
-        _nodeBottomSpace = nodeBottomSpace;
+- (void)setNodeBeforeSpace:(CGFloat)nodeBeforeSpace {
+    if (_nodeBeforeSpace != nodeBeforeSpace) {
+        _nodeBeforeSpace = nodeBeforeSpace;
     }
     [self setNeedsDisplay];
 }

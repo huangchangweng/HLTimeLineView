@@ -33,10 +33,10 @@
     
     // 根据数据设置时间轴样式
     if (indexPath.row == 0) {
-        cell.timeLineView.type = HLTimelineViewTypeBottom;
+        cell.timeLineView.type = HLTimelineViewTypeBefore;
         cell.timeLineView.nodeBorderWidth = 0; // 设置节点为实心圆
     } else if (indexPath.row == 6) {
-        cell.timeLineView.type = HLTimelineViewTypeTop;
+        cell.timeLineView.type = HLTimelineViewTypeAfter;
     } else {
         cell.timeLineView.type = HLTimelineViewTypeAll;
     }
